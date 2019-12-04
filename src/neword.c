@@ -13,6 +13,8 @@
 #include "spt_proc.h"
 #include "tpc.h"
 
+#include "perf.h"
+
 #define pick_dist_info(ol_dist_info,ol_supply_w_id) \
 switch(ol_supply_w_id) { \
 case 1: strncpy(ol_dist_info, s_dist_01, 25); break; \
@@ -29,6 +31,7 @@ case 10: strncpy(ol_dist_info, s_dist_10, 25); break; \
 
 extern MYSQL **ctx;
 extern MYSQL_STMT ***stmt;
+extern double **tpcc_perf;
 
 extern FILE *ftrx_file;
 
@@ -48,6 +51,20 @@ int neword( int t_num,
 	    int qty[]		        /* quantity of each item */
 )
 {
+  double *neworder_perf = tpcc_perf[NEWORDER];
+
+  struct timespec tbuf2;
+  clock_t clk2;
+
+  double prcd1_ms = 0;
+  double prcd2_ms = 0;
+  double prcd3_ms = 0;
+  double prcd4_ms = 0;
+  double prcd5_ms = 0;
+  double prcd6_ms = 0;
+  double prcd7_ms = 0;
+  double prcd8_ms = 0;
+  double prcd9_ms = 0;
 
 	int            w_id = w_id_arg;
 	int            d_id = d_id_arg;
@@ -130,7 +147,12 @@ int neword( int t_num,
 	param[2].buffer_type = MYSQL_TYPE_LONG;
 	param[2].buffer = &c_id;
 	if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+  clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
+  clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+  prcd1_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+
 
 	if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 	memset(column, 0, sizeof(MYSQL_BIND) * 4); /* initialize */
@@ -176,9 +198,14 @@ int neword( int t_num,
 	param[1].buffer_type = MYSQL_TYPE_LONG;
 	param[1].buffer = &w_id;
 	if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+  clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
+  clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+  prcd2_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 	if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
+
 	memset(column, 0, sizeof(MYSQL_BIND) * 2); /* initialize */
 	column[0].buffer_type = MYSQL_TYPE_LONG;
 	column[0].buffer = &d_next_o_id;
@@ -212,7 +239,11 @@ int neword( int t_num,
 	param[2].buffer_type = MYSQL_TYPE_LONG;
 	param[2].buffer = &w_id;
 	if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+  clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
+  clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+  prcd3_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 	o_id = d_next_o_id;
 
@@ -245,8 +276,11 @@ int neword( int t_num,
 	param[6].buffer_type = MYSQL_TYPE_LONG;
 	param[6].buffer = &o_all_local;
 	if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+  clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
-
+  clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+  prcd4_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 #ifdef DEBUG
 	printf("n %d\n",proceed);
@@ -265,8 +299,11 @@ int neword( int t_num,
 	param[2].buffer_type = MYSQL_TYPE_LONG;
 	param[2].buffer = &w_id;
 	if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+  clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
-
+  clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+  prcd5_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 	/* sort orders to avoid DeadLock */
 	for (i = 0; i < o_ol_cnt; i++) {
 		ol_num_seq[i]=i;
@@ -305,7 +342,11 @@ int neword( int t_num,
 		param[0].buffer_type = MYSQL_TYPE_LONG;
 		param[0].buffer = &ol_i_id;
 		if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+    clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
+    clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+    prcd6_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 		if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 		memset(column, 0, sizeof(MYSQL_BIND) * 3); /* initialize */
@@ -363,7 +404,11 @@ int neword( int t_num,
 		param[1].buffer_type = MYSQL_TYPE_LONG;
 		param[1].buffer = &ol_supply_w_id;
 		if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+    clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
+    clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+    prcd7_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 		if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 		memset(column, 0, sizeof(MYSQL_BIND) * 12); /* initialize */
@@ -449,8 +494,11 @@ int neword( int t_num,
 		param[2].buffer_type = MYSQL_TYPE_LONG;
 		param[2].buffer = &ol_supply_w_id;
 		if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+    clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
-
+    clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+    prcd8_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 		ol_amount = ol_quantity * i_price * (1 + w_tax + d_tax) * (1 - c_discount);
 		amt[ol_num_seq[ol_number - 1]] = ol_amount;
@@ -491,8 +539,11 @@ int neword( int t_num,
 		param[8].buffer = ol_dist_info;
 		param[8].buffer_length = strlen(ol_dist_info);
 		if( mysql_stmt_bind_param(mysql_stmt, param) ) goto sqlerr;
+    clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
-
+    clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
+    prcd9_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
+        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 	}			/* End Order Lines */
 
@@ -508,6 +559,7 @@ int neword( int t_num,
 		fprintf(ftrx_file,"t_num: %d finish: %lu %lu start: %lu %lu\n",t_num, tbuf1.tv_sec, tbuf1.tv_nsec,
 			tbuf_start.tv_sec, tbuf_start.tv_nsec);
 	}
+  //record processing time info for every proceed 
 
 	return (1);
 

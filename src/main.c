@@ -20,6 +20,7 @@
 #include "sequence.h"
 #include "rthist.h"
 #include "sb_percentile.h"
+#include "perf.h"
 
 /* Global SQL Variables */
 MYSQL **ctx;
@@ -427,6 +428,9 @@ int main( int argc, char *argv[] )
   if (sb_percentile_init(&local_percentile, 100000, 1.0, 1e13))
     return NULL;
 
+  if (perf_init() != 0)
+    exit(1);
+
   /* set up threads */
 
   t = malloc( sizeof(pthread_t) * num_conn );
@@ -629,11 +633,13 @@ int main( int argc, char *argv[] )
   f = (float)(success[0] + late[0]) * 60.0
     / (float)((measure_time / PRINT_INTERVAL) * PRINT_INTERVAL);
   printf("                 %.3f TpmC\n",f);
+  perf_deinit();
   exit(0);
 
  sqlerr:
   fprintf(stdout, "error at main\n");
   error(ctx[i],0);
+  perf_deinit();
   exit(1);
 
 }
@@ -673,6 +679,13 @@ void alarm_handler(int signum)
 	 ( s[4] + l[4] - prev_s[4] - prev_l[4] ),
 	 (double)cur_max_rt[4]
 	 );
+
+  double cost[MAX_POS];
+  calc_neword(cost);
+  printf("proceeds cost %.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"
+         ,cost[0], cost[1], cost[2],cost[3], cost[4], cost[5], cost[6]
+         ,cost[7], cost[7], cost[8]);
+
   fflush(stdout);
 
   for( i=0; i<5; i++ ){
