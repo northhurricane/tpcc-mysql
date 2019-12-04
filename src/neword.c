@@ -559,7 +559,18 @@ int neword( int t_num,
 		fprintf(ftrx_file,"t_num: %d finish: %lu %lu start: %lu %lu\n",t_num, tbuf1.tv_sec, tbuf1.tv_nsec,
 			tbuf_start.tv_sec, tbuf_start.tv_nsec);
 	}
-  //record processing time info for every proceed 
+  //record processing time info for every proceed
+  double prcd_dur[MAX_POS];
+  prcd_dur[0] = prcd1_ms;
+  prcd_dur[1] = prcd2_ms;
+  prcd_dur[2] = prcd3_ms;
+  prcd_dur[3] = prcd4_ms;
+  prcd_dur[4] = prcd5_ms;
+  prcd_dur[5] = prcd6_ms;
+  prcd_dur[6] = prcd7_ms;
+  prcd_dur[7] = prcd8_ms;
+  prcd_dur[8] = prcd9_ms;
+  update_neword(prcd_dur);
 
 	return (1);
 
