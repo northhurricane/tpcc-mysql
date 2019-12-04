@@ -680,11 +680,12 @@ void alarm_handler(int signum)
 	 (double)cur_max_rt[4]
 	 );
 
-  double cost[MAX_POS];
+  double cost[MAX_PROCEED_COUNT];
   calc_neword(cost);
-  printf("proceeds cost %.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"
-         ,cost[0], cost[1], cost[2],cost[3], cost[4], cost[5], cost[6]
-         ,cost[7], cost[7], cost[8]);
+  reset_neword();
+  printf("proceeds cost %.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"
+         , cost[0], cost[1], cost[2],cost[3], cost[4]
+         , cost[5], cost[6],cost[7], cost[8], cost[9]);
 
   fflush(stdout);
 

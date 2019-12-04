@@ -31,7 +31,6 @@ case 10: strncpy(ol_dist_info, s_dist_10, 25); break; \
 
 extern MYSQL **ctx;
 extern MYSQL_STMT ***stmt;
-extern double **tpcc_perf;
 
 extern FILE *ftrx_file;
 
@@ -51,7 +50,8 @@ int neword( int t_num,
 	    int qty[]		        /* quantity of each item */
 )
 {
-  double *neworder_perf = tpcc_perf[NEWORDER];
+  struct timespec tbuf3,tbuf4;
+  clock_t clk3,clk4;
 
   struct timespec tbuf2;
   clock_t clk2;
@@ -65,6 +65,7 @@ int neword( int t_num,
   double prcd7_ms = 0;
   double prcd8_ms = 0;
   double prcd9_ms = 0;
+  double prcd10_ms = 0;
 
 	int            w_id = w_id_arg;
 	int            d_id = d_id_arg;
@@ -325,6 +326,7 @@ int neword( int t_num,
 	}
 
 
+    clk3 = clock_gettime(CLOCK_MONOTONIC, &tbuf3 );
 	for (ol_number = 1; ol_number <= o_ol_cnt; ol_number++) {
 		ol_supply_w_id = supware[ol_num_seq[ol_number - 1]];
 		ol_i_id = itemid[ol_num_seq[ol_number - 1]];
@@ -546,6 +548,9 @@ int neword( int t_num,
         - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
 
 	}			/* End Order Lines */
+  clk4 = clock_gettime(CLOCK_MONOTONIC, &tbuf4 );
+  prcd10_ms += tbuf4.tv_sec * 1000.0 + tbuf4.tv_nsec / 1000000.0
+      - tbuf3.tv_sec * 1000.0 - tbuf3.tv_nsec/1000000;
 
 #ifdef DEBUG
 	printf("insert 3\n");
@@ -570,6 +575,7 @@ int neword( int t_num,
   prcd_dur[6] = prcd7_ms;
   prcd_dur[7] = prcd8_ms;
   prcd_dur[8] = prcd9_ms;
+  prcd_dur[9] = prcd10_ms;
   update_neword(prcd_dur);
 
 	return (1);
