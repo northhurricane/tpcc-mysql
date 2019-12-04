@@ -11,7 +11,7 @@ enum trx_pos
   MAX_POS = 5
 };
 
-#define MAX_PROCEED_COUNT (10)
+#define MAX_PROCEED_COUNT (200)
 
 int perf_init();
 int perf_deinit();

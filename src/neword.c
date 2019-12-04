@@ -565,7 +565,7 @@ int neword( int t_num,
 			tbuf_start.tv_sec, tbuf_start.tv_nsec);
 	}
   //record processing time info for every proceed
-  double prcd_dur[MAX_POS];
+  double prcd_dur[MAX_PROCEED_COUNT];
   prcd_dur[0] = prcd1_ms;
   prcd_dur[1] = prcd2_ms;
   prcd_dur[2] = prcd3_ms;
@@ -576,6 +576,8 @@ int neword( int t_num,
   prcd_dur[7] = prcd8_ms;
   prcd_dur[8] = prcd9_ms;
   prcd_dur[9] = prcd10_ms;
+  prcd_dur[10] = tbuf1.tv_sec * 1000.0 + tbuf1.tv_nsec / 1000000.0
+      - tbuf_start.tv_sec * 1000.0 - tbuf_start.tv_nsec/1000000;
   update_neword(prcd_dur);
 
 	return (1);

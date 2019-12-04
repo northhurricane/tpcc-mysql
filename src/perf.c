@@ -20,6 +20,7 @@ void static init_neword()
   tpcc_perf[NEWORDER][7] = 0;
   tpcc_perf[NEWORDER][8] = 0;
   tpcc_perf[NEWORDER][9] = 0;
+  tpcc_perf[NEWORDER][10] = 0;
 }
 
 int perf_init()
@@ -54,6 +55,7 @@ void update_neword(double prcd[])
   tpcc_perf[NEWORDER][7] += prcd[7];
   tpcc_perf[NEWORDER][8] += prcd[8];
   tpcc_perf[NEWORDER][9] += prcd[9];
+  tpcc_perf[NEWORDER][10] += prcd[9];
   pthread_spin_unlock(&spinlock_neword);
 }
 
@@ -70,6 +72,7 @@ double calc_neword(double cost[])
   cost[7] = tpcc_perf[NEWORDER][7] / tpcc_count[NEWORDER];
   cost[8] = tpcc_perf[NEWORDER][8] / tpcc_count[NEWORDER];
   cost[9] = tpcc_perf[NEWORDER][9] / tpcc_count[NEWORDER];
+  cost[10] = tpcc_perf[NEWORDER][10] / tpcc_count[NEWORDER];
   pthread_spin_unlock(&spinlock_neword);
 }
 
