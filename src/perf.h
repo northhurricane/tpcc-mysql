@@ -1,6 +1,8 @@
 #ifndef _PERF_H_
 #define _PERF_H_
 
+#include <stdint.h>
+
 enum trx_pos
 {
   NEWORDER = 0,
@@ -16,8 +18,8 @@ enum trx_pos
 int perf_init();
 int perf_deinit();
 
-void update_neword(double prcd[]);
-double calc_neword(double cost[]);
+void update_neword(uint64_t prcd[]);
+uint64_t calc_neword(double cost[]);
 
 
 #endif //_PERF_H_

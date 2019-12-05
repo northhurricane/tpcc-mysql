@@ -14,6 +14,7 @@
 #include "tpc.h"
 
 #include "perf.h"
+#include <inttypes.h>
 
 #define pick_dist_info(ol_dist_info,ol_supply_w_id) \
 switch(ol_supply_w_id) { \
@@ -56,16 +57,16 @@ int neword( int t_num,
   struct timespec tbuf2;
   clock_t clk2;
 
-  double prcd1_ms = 0;
-  double prcd2_ms = 0;
-  double prcd3_ms = 0;
-  double prcd4_ms = 0;
-  double prcd5_ms = 0;
-  double prcd6_ms = 0;
-  double prcd7_ms = 0;
-  double prcd8_ms = 0;
-  double prcd9_ms = 0;
-  double prcd10_ms = 0;
+  uint64_t prcd1_ms = 0;
+  uint64_t prcd2_ms = 0;
+  uint64_t prcd3_ms = 0;
+  uint64_t prcd4_ms = 0;
+  uint64_t prcd5_ms = 0;
+  uint64_t prcd6_ms = 0;
+  uint64_t prcd7_ms = 0;
+  uint64_t prcd8_ms = 0;
+  uint64_t prcd9_ms = 0;
+  uint64_t prcd10_ms = 0;
 
 	int            w_id = w_id_arg;
 	int            d_id = d_id_arg;
@@ -151,8 +152,8 @@ int neword( int t_num,
   clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
   clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-  prcd1_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+  prcd1_ms = tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+      - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 
 	if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
@@ -202,8 +203,8 @@ int neword( int t_num,
   clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
   clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-  prcd2_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+  prcd2_ms = tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+      - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 	if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 
@@ -243,8 +244,8 @@ int neword( int t_num,
   clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
   clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-  prcd3_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+  prcd3_ms = tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+      - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 	o_id = d_next_o_id;
 
@@ -280,8 +281,8 @@ int neword( int t_num,
   clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
   clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-  prcd4_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+  prcd4_ms = tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+      - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 #ifdef DEBUG
 	printf("n %d\n",proceed);
@@ -303,8 +304,8 @@ int neword( int t_num,
   clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 	if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
   clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-  prcd5_ms = tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-      - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+  prcd5_ms = tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+      - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 	/* sort orders to avoid DeadLock */
 	for (i = 0; i < o_ol_cnt; i++) {
 		ol_num_seq[i]=i;
@@ -347,8 +348,8 @@ int neword( int t_num,
     clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
     clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-    prcd6_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+    prcd6_ms += tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+        - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 		if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 		memset(column, 0, sizeof(MYSQL_BIND) * 3); /* initialize */
@@ -409,8 +410,8 @@ int neword( int t_num,
     clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
     clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-    prcd7_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+    prcd7_ms += tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+        - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 		if( mysql_stmt_store_result(mysql_stmt) ) goto sqlerr;
 		memset(column, 0, sizeof(MYSQL_BIND) * 12); /* initialize */
@@ -499,8 +500,8 @@ int neword( int t_num,
     clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
     clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-    prcd8_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+    prcd8_ms += tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+        - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 		ol_amount = ol_quantity * i_price * (1 + w_tax + d_tax) * (1 - c_discount);
 		amt[ol_num_seq[ol_number - 1]] = ol_amount;
@@ -544,13 +545,13 @@ int neword( int t_num,
     clk1 = clock_gettime(CLOCK_MONOTONIC, &tbuf1 );
 		if( mysql_stmt_execute(mysql_stmt) ) goto sqlerr;
     clk2 = clock_gettime(CLOCK_MONOTONIC, &tbuf2 );
-    prcd9_ms += tbuf2.tv_sec * 1000.0 + tbuf2.tv_nsec / 1000000.0
-        - tbuf1.tv_sec * 1000.0 - tbuf1.tv_nsec/1000000;
+    prcd9_ms += tbuf2.tv_sec * 1000000000 + tbuf2.tv_nsec
+        - tbuf1.tv_sec * 1000000000 - tbuf1.tv_nsec;
 
 	}			/* End Order Lines */
   clk4 = clock_gettime(CLOCK_MONOTONIC, &tbuf4 );
-  prcd10_ms += tbuf4.tv_sec * 1000.0 + tbuf4.tv_nsec / 1000000.0
-      - tbuf3.tv_sec * 1000.0 - tbuf3.tv_nsec/1000000;
+  prcd10_ms += tbuf4.tv_sec * 1000000000 + tbuf4.tv_nsec
+      - tbuf3.tv_sec * 1000000000 - tbuf3.tv_nsec;
 
 #ifdef DEBUG
 	printf("insert 3\n");
@@ -565,7 +566,7 @@ int neword( int t_num,
 			tbuf_start.tv_sec, tbuf_start.tv_nsec);
 	}
   //record processing time info for every proceed
-  double prcd_dur[MAX_PROCEED_COUNT];
+  uint64_t prcd_dur[MAX_PROCEED_COUNT];
   prcd_dur[0] = prcd1_ms;
   prcd_dur[1] = prcd2_ms;
   prcd_dur[2] = prcd3_ms;
@@ -576,9 +577,11 @@ int neword( int t_num,
   prcd_dur[7] = prcd8_ms;
   prcd_dur[8] = prcd9_ms;
   prcd_dur[9] = prcd10_ms;
-  prcd_dur[10] = tbuf1.tv_sec * 1000.0 + tbuf1.tv_nsec / 1000000.0
-      - tbuf_start.tv_sec * 1000.0 - tbuf_start.tv_nsec/1000000;
+  prcd_dur[10] = tbuf1.tv_sec * 1000000000 + tbuf1.tv_nsec 
+      - tbuf_start.tv_sec * 1000000000 - tbuf_start.tv_nsec;
   update_neword(prcd_dur);
+  printf("%PRIu64,%PRIu64,%PRIu64,%PRIu64,%PRIu64",
+         prcd6_ms, prcd7_ms, prcd8_ms, prcd9_ms, prcd10_ms);
 
 	return (1);
 

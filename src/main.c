@@ -683,9 +683,9 @@ void alarm_handler(int signum)
   double cost[MAX_PROCEED_COUNT];
   calc_neword(cost);
   reset_neword();
-  printf("proceeds cost %.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"
+  printf("proceeds cost %.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f\n"
          , cost[0], cost[1], cost[2],cost[3], cost[4]
-         , cost[5], cost[6],cost[7], cost[8]
+         , cost[5], cost[6], cost[7], cost[8]
          , cost[9], cost[10]);
 
   fflush(stdout);

@@ -4,7 +4,7 @@
 
 pthread_spinlock_t spinlock_neword;
 
-double tpcc_perf[MAX_POS][MAX_PROCEED_COUNT];
+uint64_t tpcc_perf[MAX_POS][MAX_PROCEED_COUNT];
 uint64_t tpcc_count[MAX_POS];
 
 void static init_neword()
@@ -41,7 +41,7 @@ int perf_deinit()
   return 0;
 }
 
-void update_neword(double prcd[])
+void update_neword(uint64_t prcd[])
 {
   pthread_spin_lock(&spinlock_neword);
   tpcc_count[NEWORDER]++;
@@ -55,13 +55,14 @@ void update_neword(double prcd[])
   tpcc_perf[NEWORDER][7] += prcd[7];
   tpcc_perf[NEWORDER][8] += prcd[8];
   tpcc_perf[NEWORDER][9] += prcd[9];
-  tpcc_perf[NEWORDER][10] += prcd[9];
+  tpcc_perf[NEWORDER][10] += prcd[10];
   pthread_spin_unlock(&spinlock_neword);
 }
 
-double calc_neword(double cost[])
+uint64_t calc_neword(double cost[])
 {
   pthread_spin_lock(&spinlock_neword);
+  uint64_t ret = tpcc_count[NEWORDER];
   cost[0] = tpcc_perf[NEWORDER][0] / tpcc_count[NEWORDER];
   cost[1] = tpcc_perf[NEWORDER][1] / tpcc_count[NEWORDER];
   cost[2] = tpcc_perf[NEWORDER][2] / tpcc_count[NEWORDER];
@@ -74,6 +75,7 @@ double calc_neword(double cost[])
   cost[9] = tpcc_perf[NEWORDER][9] / tpcc_count[NEWORDER];
   cost[10] = tpcc_perf[NEWORDER][10] / tpcc_count[NEWORDER];
   pthread_spin_unlock(&spinlock_neword);
+  return ret;
 }
 
 void reset_neword()
@@ -90,5 +92,6 @@ void reset_neword()
   tpcc_perf[NEWORDER][7] = 0;
   tpcc_perf[NEWORDER][8] = 0;
   tpcc_perf[NEWORDER][9] = 0;
+  tpcc_perf[NEWORDER][10] = 0;
   pthread_spin_unlock(&spinlock_neword);
 }
