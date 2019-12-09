@@ -63,17 +63,17 @@ uint64_t calc_neword(double cost[])
 {
   pthread_spin_lock(&spinlock_neword);
   uint64_t ret = tpcc_count[NEWORDER];
-  cost[0] = tpcc_perf[NEWORDER][0] / tpcc_count[NEWORDER];
-  cost[1] = tpcc_perf[NEWORDER][1] / tpcc_count[NEWORDER];
-  cost[2] = tpcc_perf[NEWORDER][2] / tpcc_count[NEWORDER];
-  cost[3] = tpcc_perf[NEWORDER][3] / tpcc_count[NEWORDER];
-  cost[4] = tpcc_perf[NEWORDER][4] / tpcc_count[NEWORDER];
-  cost[5] = tpcc_perf[NEWORDER][5] / tpcc_count[NEWORDER];
-  cost[6] = tpcc_perf[NEWORDER][6] / tpcc_count[NEWORDER];
-  cost[7] = tpcc_perf[NEWORDER][7] / tpcc_count[NEWORDER];
-  cost[8] = tpcc_perf[NEWORDER][8] / tpcc_count[NEWORDER];
-  cost[9] = tpcc_perf[NEWORDER][9] / tpcc_count[NEWORDER];
-  cost[10] = tpcc_perf[NEWORDER][10] / tpcc_count[NEWORDER];
+  cost[0] = (tpcc_perf[NEWORDER][0] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[1] = (tpcc_perf[NEWORDER][1] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[2] = (tpcc_perf[NEWORDER][2] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[3] = (tpcc_perf[NEWORDER][3] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[4] = (tpcc_perf[NEWORDER][4] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[5] = (tpcc_perf[NEWORDER][5] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[6] = (tpcc_perf[NEWORDER][6] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[7] = (tpcc_perf[NEWORDER][7] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[8] = (tpcc_perf[NEWORDER][8] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[9] = (tpcc_perf[NEWORDER][9] / tpcc_count[NEWORDER]) / 1000000.0;
+  cost[10] = (tpcc_perf[NEWORDER][10] / tpcc_count[NEWORDER]) / 1000000.0;
   pthread_spin_unlock(&spinlock_neword);
   return ret;
 }
