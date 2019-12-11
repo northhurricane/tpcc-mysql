@@ -580,8 +580,6 @@ int neword( int t_num,
   prcd_dur[10] = tbuf1.tv_sec * 1000000000 + tbuf1.tv_nsec 
       - tbuf_start.tv_sec * 1000000000 - tbuf_start.tv_nsec;
   update_neword(prcd_dur);
-  printf("%PRIu64,%PRIu64,%PRIu64,%PRIu64,%PRIu64",
-         prcd6_ms, prcd7_ms, prcd8_ms, prcd9_ms, prcd10_ms);
 
 	return (1);
 
